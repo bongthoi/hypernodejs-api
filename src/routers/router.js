@@ -3,16 +3,17 @@ module.exports = function (app) {
     let invalidPathUtility = require("../utilities/invalidPathUtility");
     let sampleService = require("../services/sampleService");
     let buyerService = require("../services/buyerService");
+    let bna_config=require("../../config/bna_config.json");
 
     /** */
     let SampleService = new sampleService();
     let BuyerService = new buyerService();
 
     /**Buyers */
-    app.route("/restapi/client/buyers")
+    app.route("/api/client/"+bna_config.namespace +".Buyer")
         .get(BuyerService.getAll)
         .post(BuyerService.insert);
-    app.route("/restapi/client/buyer/:buyerID")
+    app.route("/api/client/"+bna_config.namespace +".Buyer/:buyerID")
         .get(BuyerService.getByID)
         .put(BuyerService.update)
         .delete(BuyerService.delete);
