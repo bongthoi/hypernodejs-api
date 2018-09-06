@@ -12,16 +12,16 @@ module.exports = function (app) {
     let TransactionService=new transactionService();
 
     /**Buyers */
-    app.route("/api/client/" + bna_config.namespace + ".Buyer")
+    app.route("/api/" + bna_config.namespace + ".Buyer")
         .get(BuyerService.getAll)
         .post(BuyerService.insert);
-    app.route("/api/client/" + bna_config.namespace + ".Buyer/:buyerID")
+    app.route("/api/" + bna_config.namespace + ".Buyer/:buyerID")
         .get(BuyerService.getByID)
         .put(BuyerService.update)
         .delete(BuyerService.delete);
 
     /**Transaction */
-    app.route("/api/client/" + bna_config.namespace + ".Transaction")
+    app.route("/api/" + bna_config.namespace + ".Transaction")
         .get(TransactionService.getAll);
         
 
