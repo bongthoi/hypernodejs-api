@@ -170,14 +170,14 @@ module.exports = class orderService {
     };
 
     addOrder(req, res, next) {
-        let method = 'addOrder';
+        let method = 'orderService/addOrder';
         console.log(method + ' req.body.buyer is: ' + req.body.buyer);
         let businessNetworkConnection;
         let factory;
         let ts = Date.now();
         let orderNo = req.body.buyer.replace(/@/, '').replace(/\./, '') + ts;
         businessNetworkConnection = new BusinessNetworkConnection();
-       
+
         return businessNetworkConnection.connect(req.body.buyer)
             .then(() => {
                 factory = businessNetworkConnection.getBusinessNetwork().getFactory();
@@ -244,6 +244,6 @@ module.exports = class orderService {
                 res.send({ 'result': 'failed', 'error': ' order ' + orderNo + ' add failed on on business network connection ' + error.message });
             });
 
-    };
+    };    
 
 }
