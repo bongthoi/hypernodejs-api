@@ -1,6 +1,7 @@
 'use strict';
 let fs = require('fs');
 let path = require('path');
+let bna_config = require("../../config/bna_config.json");
 const BusinessNetworkConnection = require('composer-client').BusinessNetworkConnection;
 const BusinessNetworkDefinition = require('composer-common').BusinessNetworkDefinition;
 const svc = require('../utilities/Order_Services');
@@ -181,15 +182,15 @@ module.exports = class orderService {
         return businessNetworkConnection.connect(req.body.buyer)
             .then(() => {
                 factory = businessNetworkConnection.getBusinessNetwork().getFactory();
-                let order = factory.newResource(NS, 'Order', orderNo);
+                let order = factory.newResource(bna_config.namespace, 'Order', orderNo);
                 order = svc.createOrderTemplate(order);
                 order.amount = 0;
                 order.orderNumber = orderNo;
-                order.buyer = factory.newRelationship(NS, 'Buyer', req.body.buyer);
-                order.seller = factory.newRelationship(NS, 'Seller', req.body.seller);
-                order.provider = factory.newRelationship(NS, 'Provider', 'noop@dummy');
-                order.shipper = factory.newRelationship(NS, 'Shipper', 'noop@dummy');
-                order.financeCo = factory.newRelationship(NS, 'FinanceCo', financeCoID);
+                order.buyer = factory.newRelationship(bna_config.namespace, 'Buyer', req.body.buyer);
+                order.seller = factory.newRelationship(bna_config.namespace, 'Seller', req.body.seller);
+                order.provider = factory.newRelationship(bna_config.namespace, 'Provider', 'noop@dummy');
+                order.shipper = factory.newRelationship(bna_config.namespace, 'Shipper', 'noop@dummy');
+                order.financeCo = factory.newRelationship(bna_config.namespace, 'FinanceCo', financeCoID);
                 for (let each in req.body.items) {
                     (function (_idx, _arr) {
                         _arr[_idx].description = _arr[_idx].itemDescription;
@@ -198,15 +199,15 @@ module.exports = class orderService {
                     })(each, req.body.items);
                 }
                 // create the buy transaction
-                const createNew = factory.newTransaction(NS, 'CreateOrder');
+                const createNew = factory.newTransaction(bna_config.namespace, 'CreateOrder');
 
-                createNew.order = factory.newRelationship(NS, 'Order', order.$identifier);
-                createNew.buyer = factory.newRelationship(NS, 'Buyer', req.body.buyer);
-                createNew.seller = factory.newRelationship(NS, 'Seller', req.body.seller);
-                createNew.financeCo = factory.newRelationship(NS, 'FinanceCo', financeCoID);
+                createNew.order = factory.newRelationship(bna_config.namespace, 'Order', order.$identifier);
+                createNew.buyer = factory.newRelationship(bna_config.namespace, 'Buyer', req.body.buyer);
+                createNew.seller = factory.newRelationship(bna_config.namespace, 'Seller', req.body.seller);
+                createNew.financeCo = factory.newRelationship(bna_config.namespace, 'FinanceCo', financeCoID);
                 createNew.amount = order.amount;
                 // add the order to the asset registry.
-                return businessNetworkConnection.getAssetRegistry(NS + '.Order')
+                return businessNetworkConnection.getAssetRegistry(bna_config.namespace + '.Order')
                     .then((assetRegistry) => {
                         return assetRegistry.add(order)
                             .then(() => {
