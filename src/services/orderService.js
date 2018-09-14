@@ -4,7 +4,7 @@ let path = require('path');
 let bna_config = require("../../config/bna_config.json");
 const BusinessNetworkConnection = require('composer-client').BusinessNetworkConnection;
 const BusinessNetworkDefinition = require('composer-common').BusinessNetworkDefinition;
-const svc = require('../utilities/Order_Services');
+const ou = require('../utilities/Order_Utilities');
 var OrderRepo = require("../repositories/orderRepo");
 var Order = require("../models/order");
 
@@ -176,21 +176,20 @@ module.exports = class orderService {
         let factory;
         let ts = Date.now();
         let orderNo = req.body.buyer.replace(/@/, '').replace(/\./, '') + ts;
-        
         businessNetworkConnection = new BusinessNetworkConnection();
-        
+       
         return businessNetworkConnection.connect(req.body.buyer)
             .then(() => {
                 factory = businessNetworkConnection.getBusinessNetwork().getFactory();
                 let order = factory.newResource(bna_config.namespace, 'Order', orderNo);
-                order = svc.createOrderTemplate(order);
+                order = ou.createOrderTemplate(order);
                 order.amount = 0;
                 order.orderNumber = orderNo;
                 order.buyer = factory.newRelationship(bna_config.namespace, 'Buyer', req.body.buyer);
                 order.seller = factory.newRelationship(bna_config.namespace, 'Seller', req.body.seller);
-                order.provider = factory.newRelationship(bna_config.namespace, 'Provider', 'noop@dummy');
-                order.shipper = factory.newRelationship(bna_config.namespace, 'Shipper', 'noop@dummy');
-                order.financeCo = factory.newRelationship(bna_config.namespace, 'FinanceCo', financeCoID);
+                order.provider = factory.newRelationship(bna_config.namespace, 'Provider', req.body.provider);
+                order.shipper = factory.newRelationship(bna_config.namespace, 'Shipper', req.body.shipper);
+                order.financeCo = factory.newRelationship(bna_config.namespace, 'FinanceCo', req.body.financeCo);
                 for (let each in req.body.items) {
                     (function (_idx, _arr) {
                         _arr[_idx].description = _arr[_idx].itemDescription;
@@ -204,7 +203,7 @@ module.exports = class orderService {
                 createNew.order = factory.newRelationship(bna_config.namespace, 'Order', order.$identifier);
                 createNew.buyer = factory.newRelationship(bna_config.namespace, 'Buyer', req.body.buyer);
                 createNew.seller = factory.newRelationship(bna_config.namespace, 'Seller', req.body.seller);
-                createNew.financeCo = factory.newRelationship(bna_config.namespace, 'FinanceCo', financeCoID);
+                createNew.financeCo = factory.newRelationship(bna_config.namespace, 'FinanceCo', req.body.financeCo);
                 createNew.amount = order.amount;
                 // add the order to the asset registry.
                 return businessNetworkConnection.getAssetRegistry(bna_config.namespace + '.Order')
@@ -219,7 +218,7 @@ module.exports = class orderService {
                                     .catch((error) => {
                                         if (error.message.search('MVCC_READ_CONFLICT') !== -1) {
                                             console.log(orderNo + ' retrying assetRegistry.add for: ' + orderNo);
-                                            
+                                            ou.loadTransaction(createNew, orderNo, businessNetworkConnection);
                                         }
                                         else { console.log(orderNo + ' submitTransaction failed with text: ', error.message); }
                                     });
@@ -227,7 +226,7 @@ module.exports = class orderService {
                             .catch((error) => {
                                 if (error.message.search('MVCC_READ_CONFLICT') !== -1) {
                                     console.log(orderNo + ' retrying assetRegistry.add for: ' + orderNo);
-                                    
+                                    ou.loadTransaction(createNew, orderNo, businessNetworkConnection);
                                 }
                                 else {
                                     console.log(orderNo + ' assetRegistry.add failed: ', error.message);
@@ -244,6 +243,7 @@ module.exports = class orderService {
                 console.log(orderNo + ' business network connection failed: text', error.message);
                 res.send({ 'result': 'failed', 'error': ' order ' + orderNo + ' add failed on on business network connection ' + error.message });
             });
-    }
+
+    };
 
 }
