@@ -3,27 +3,30 @@ let fs = require('fs');
 let path = require('path');
 const BusinessNetworkConnection = require('composer-client').BusinessNetworkConnection;
 const BusinessNetworkDefinition = require('composer-common').BusinessNetworkDefinition;
-var OrderRepo=require("../repositories/orderRepo");
-var Order=require("../models/order");
+const svc = require('../utilities/Order_Services');
+var OrderRepo = require("../repositories/orderRepo");
+var Order = require("../models/order");
+
 
 
 /** */
-var orderRepo=new OrderRepo();
+var orderRepo = new OrderRepo();
 
-module.exports=class orderService{
-    constructor(){};
-    getAll(req,res){        
-        let method="orderService/getAll";
+module.exports = class orderService {
+    constructor() { };
+    getAll(req, res) {
+        let method = "orderService/getAll";
         console.log(method);
 
         orderRepo.getAll()
-        .then(data=>{
-            console.log(method + " -->success");
-            return res.json(data);
-        })
-        .catch(err=>{
-            console.log(method + " -->failed: " + err.message);
-            res.sendStatus(500).json({"result":"failed","error":+err.message});});
+            .then(data => {
+                console.log(method + " -->success");
+                return res.json(data);
+            })
+            .catch(err => {
+                console.log(method + " -->failed: " + err.message);
+                res.sendStatus(500).json({ "result": "failed", "error": +err.message });
+            });
 
     };
 
@@ -31,34 +34,34 @@ module.exports=class orderService{
         let method = "orderService/insert";
         console.log(method);
 
-        let order = (new Order().setBuyer(req.body.buyer));   
-        order.items=req.body.items;
-        order.status=req.body.status;
-        order.dispute=req.body.dispute;
-        order.resolve=req.body.resolve;
-        order.backorder=req.body.backorder;
-        order.refund=req.body.refund;
-        order.amount=req.body.amount;
-        order.created=req.body.created;
-        order.bought=req.body.bought;
-        order.cancelled=req.body.cancelled;
-        order.ordered=req.body.ordered;
-        order.dateBackordered=req.body.dateBackordered;
-        order.requestShipment=req.body.requestShipment;
-        order.delivered=req.body.delivered;
-        order.delivering=req.body.delivering;
-        order.disputeOpened=req.body.disputeOpened;
-        order.disputeResolved=req.body.disputeResolved;
-        order.paymentRequested=req.body.paymentRequested;
-        order.orderRefunded=req.body.orderRefunded;
-        order.approved=req.body.approved;
-        order.paid=req.body.paid;
-        order.provider=req.body.provider;
-        order.shipper=req.body.shipper;
-        order.seller=req.body.seller;
-        order.financeCo=req.body.financeCo;
+        let order = (new Order().setBuyer(req.body.buyer));
+        order.items = req.body.items;
+        order.status = req.body.status;
+        order.dispute = req.body.dispute;
+        order.resolve = req.body.resolve;
+        order.backorder = req.body.backorder;
+        order.refund = req.body.refund;
+        order.amount = req.body.amount;
+        order.created = req.body.created;
+        order.bought = req.body.bought;
+        order.cancelled = req.body.cancelled;
+        order.ordered = req.body.ordered;
+        order.dateBackordered = req.body.dateBackordered;
+        order.requestShipment = req.body.requestShipment;
+        order.delivered = req.body.delivered;
+        order.delivering = req.body.delivering;
+        order.disputeOpened = req.body.disputeOpened;
+        order.disputeResolved = req.body.disputeResolved;
+        order.paymentRequested = req.body.paymentRequested;
+        order.orderRefunded = req.body.orderRefunded;
+        order.approved = req.body.approved;
+        order.paid = req.body.paid;
+        order.provider = req.body.provider;
+        order.shipper = req.body.shipper;
+        order.seller = req.body.seller;
+        order.financeCo = req.body.financeCo;
 
-        
+
 
         orderRepo.insert(order)
             .then(result => {
@@ -67,11 +70,11 @@ module.exports=class orderService{
             })
             .catch(error => {
                 console.log(method + " -->failed:" + error.message);
-                res.sendStatus(500).json({"result":"failed","error":+error.message});
+                res.sendStatus(500).json({ "result": "failed", "error": +error.message });
             });
     };
-    
-    getByID(req,res){
+
+    getByID(req, res) {
         let method = "orderService/getByID";
         console.log(method);
 
@@ -82,11 +85,11 @@ module.exports=class orderService{
             })
             .catch(error => {
                 console.log(method + " -->failed:" + error.message);
-                res.sendStatus(500).json({"result":"failed","error":+error.message});
+                res.sendStatus(500).json({ "result": "failed", "error": +error.message });
             });
     };
-    
-    update(req,res){
+
+    update(req, res) {
         let method = "orderService/update";
         console.log(method);
 
@@ -101,11 +104,11 @@ module.exports=class orderService{
             })
             .catch(error => {
                 console.log(method + " -->failed:" + error.message);
-                res.sendStatus(500).json({"result":"failed","error":+error.message});
+                res.sendStatus(500).json({ "result": "failed", "error": +error.message });
             });
     };
-    
-    delete(req,res){
+
+    delete(req, res) {
         let method = "orderService/Delete";
         console.log(method);
 
@@ -116,7 +119,7 @@ module.exports=class orderService{
             })
             .catch(error => {
                 console.log(method + " -->failed:" + error.message);
-                res.sendStatus(500).json({"result":"failed","error":+error.message});
+                res.sendStatus(500).json({ "result": "failed", "error": +error.message });
             });
     };
 
@@ -164,5 +167,82 @@ module.exports=class orderService{
                 res.send({ 'result': 'failed', 'error': 'create bnd from archive: ' + error.message });
             });
     };
+
+    addOrder(req, res, next) {
+        let method = 'addOrder';
+        console.log(method + ' req.body.buyer is: ' + req.body.buyer);
+        let businessNetworkConnection;
+        let factory;
+        let ts = Date.now();
+        let orderNo = req.body.buyer.replace(/@/, '').replace(/\./, '') + ts;
+        
+        businessNetworkConnection = new BusinessNetworkConnection();
+        
+        return businessNetworkConnection.connect(req.body.buyer)
+            .then(() => {
+                factory = businessNetworkConnection.getBusinessNetwork().getFactory();
+                let order = factory.newResource(NS, 'Order', orderNo);
+                order = svc.createOrderTemplate(order);
+                order.amount = 0;
+                order.orderNumber = orderNo;
+                order.buyer = factory.newRelationship(NS, 'Buyer', req.body.buyer);
+                order.seller = factory.newRelationship(NS, 'Seller', req.body.seller);
+                order.provider = factory.newRelationship(NS, 'Provider', 'noop@dummy');
+                order.shipper = factory.newRelationship(NS, 'Shipper', 'noop@dummy');
+                order.financeCo = factory.newRelationship(NS, 'FinanceCo', financeCoID);
+                for (let each in req.body.items) {
+                    (function (_idx, _arr) {
+                        _arr[_idx].description = _arr[_idx].itemDescription;
+                        order.items.push(JSON.stringify(_arr[_idx]));
+                        order.amount += parseInt(_arr[_idx].extendedPrice);
+                    })(each, req.body.items);
+                }
+                // create the buy transaction
+                const createNew = factory.newTransaction(NS, 'CreateOrder');
+
+                createNew.order = factory.newRelationship(NS, 'Order', order.$identifier);
+                createNew.buyer = factory.newRelationship(NS, 'Buyer', req.body.buyer);
+                createNew.seller = factory.newRelationship(NS, 'Seller', req.body.seller);
+                createNew.financeCo = factory.newRelationship(NS, 'FinanceCo', financeCoID);
+                createNew.amount = order.amount;
+                // add the order to the asset registry.
+                return businessNetworkConnection.getAssetRegistry(NS + '.Order')
+                    .then((assetRegistry) => {
+                        return assetRegistry.add(order)
+                            .then(() => {
+                                return businessNetworkConnection.submitTransaction(createNew)
+                                    .then(() => {
+                                        console.log(' order ' + orderNo + ' successfully added');
+                                        res.send({ 'result': ' order ' + orderNo + ' successfully added' });
+                                    })
+                                    .catch((error) => {
+                                        if (error.message.search('MVCC_READ_CONFLICT') !== -1) {
+                                            console.log(orderNo + ' retrying assetRegistry.add for: ' + orderNo);
+                                            
+                                        }
+                                        else { console.log(orderNo + ' submitTransaction failed with text: ', error.message); }
+                                    });
+                            })
+                            .catch((error) => {
+                                if (error.message.search('MVCC_READ_CONFLICT') !== -1) {
+                                    console.log(orderNo + ' retrying assetRegistry.add for: ' + orderNo);
+                                    
+                                }
+                                else {
+                                    console.log(orderNo + ' assetRegistry.add failed: ', error.message);
+                                    res.send({ 'result': 'failed', 'error': ' order ' + orderNo + ' getAssetRegistry failed ' + error.message });
+                                }
+                            });
+                    })
+                    .catch((error) => {
+                        console.log(orderNo + ' getAssetRegistry failed: ', error.message);
+                        res.send({ 'result': 'failed', 'error': ' order ' + orderNo + ' getAssetRegistry failed ' + error.message });
+                    });
+            })
+            .catch((error) => {
+                console.log(orderNo + ' business network connection failed: text', error.message);
+                res.send({ 'result': 'failed', 'error': ' order ' + orderNo + ' add failed on on business network connection ' + error.message });
+            });
+    }
 
 }
