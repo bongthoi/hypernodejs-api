@@ -35,7 +35,7 @@ module.exports = class OrderRepo {
 
         let method = "orderRepo/insert/orderNumber: " + order.orderNumber;
         console.log(method);
-        
+
         const options = {
             method: "POST",
             uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + order.$class,
@@ -189,5 +189,5 @@ module.exports = class OrderRepo {
                 return console.log(err);
             });
     };
-
+    
 }

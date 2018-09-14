@@ -1,4 +1,8 @@
 'use strict';
+let fs = require('fs');
+let path = require('path');
+const BusinessNetworkConnection = require('composer-client').BusinessNetworkConnection;
+const BusinessNetworkDefinition = require('composer-common').BusinessNetworkDefinition;
 var OrderRepo=require("../repositories/orderRepo");
 var Order=require("../models/order");
 
@@ -113,6 +117,51 @@ module.exports=class orderService{
             .catch(error => {
                 console.log(method + " -->failed:" + error.message);
                 res.sendStatus(500).json({"result":"failed","error":+error.message});
+            });
+    };
+
+    getOrderByUserID(req, res, next) {
+        let method = 'getMyOrders';
+
+        console.log(method + ' req.body.userID is: ' + req.body.userID);
+        let allOrders = new Array();
+        let businessNetworkConnection;
+
+        let ser;
+        let archiveFile = fs.readFileSync(path.join(path.dirname(require.main.filename), 'network', 'dist', 'zerotoblockchain-network.bna'));
+        businessNetworkConnection = new BusinessNetworkConnection();
+        return BusinessNetworkDefinition.fromArchive(archiveFile)
+            .then((bnd) => {
+                ser = bnd.getSerializer();
+
+                console.log(method + ' req.body.userID is: ' + req.body.userID);
+                return businessNetworkConnection.connect(req.body.userID)
+                    .then(() => {
+                        return businessNetworkConnection.query('selectOrders')
+                            .then((orders) => {
+                                allOrders = new Array();
+                                for (let each in orders) {
+                                    (function (_idx, _arr) {
+                                        let _jsn = ser.toJSON(_arr[_idx]);
+                                        _jsn.id = _arr[_idx].orderNumber;
+                                        allOrders.push(_jsn);
+                                    })(each, orders);
+                                }
+                                res.send({ 'result': 'success', 'orders': allOrders });
+                            })
+                            .catch((error) => {
+                                console.log('selectOrders failed ', error);
+                                res.send({ 'result': 'failed', 'error': 'selectOrders: ' + error.message });
+                            });
+                    })
+                    .catch((error) => {
+                        console.log('businessNetwork connect failed ', error);
+                        res.send({ 'result': 'failed', 'error': 'businessNetwork: ' + error.message });
+                    });
+            })
+            .catch((error) => {
+                console.log('create bnd from archive failed ', error);
+                res.send({ 'result': 'failed', 'error': 'create bnd from archive: ' + error.message });
             });
     };
 

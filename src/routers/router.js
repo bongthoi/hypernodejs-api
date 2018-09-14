@@ -41,6 +41,8 @@ module.exports = function (app) {
         .get(OrderService.getByID)
         .put(OrderService.update)
         .delete(OrderService.delete);
+    app.route("/api/" + bna_config.namespace + ".Order/getOrderByUserID")
+        .post(OrderService.getOrderByUserID);
 
 
     /**Transaction */
