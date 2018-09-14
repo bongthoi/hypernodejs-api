@@ -121,9 +121,9 @@ module.exports=class orderService{
     };
 
     getOrderByUserID(req, res, next) {
-        let method = 'getMyOrders';
+        let method = 'orderService/getOrderByUserID';
 
-        console.log(method + ' req.body.userID is: ' + req.body.userID);
+        console.log(method + ' req.params.userID is: ' + req.params.userID);
         let allOrders = new Array();
         let businessNetworkConnection;
 
@@ -134,8 +134,8 @@ module.exports=class orderService{
             .then((bnd) => {
                 ser = bnd.getSerializer();
 
-                console.log(method + ' req.body.userID is: ' + req.body.userID);
-                return businessNetworkConnection.connect(req.body.userID)
+                console.log(method + ' req.params.userID is: ' + req.params.userID);
+                return businessNetworkConnection.connect(req.params.userID)
                     .then(() => {
                         return businessNetworkConnection.query('selectOrders')
                             .then((orders) => {
@@ -147,7 +147,7 @@ module.exports=class orderService{
                                         allOrders.push(_jsn);
                                     })(each, orders);
                                 }
-                                res.send({ 'result': 'success', 'orders': allOrders });
+                                res.json(allOrders);
                             })
                             .catch((error) => {
                                 console.log('selectOrders failed ', error);
