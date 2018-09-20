@@ -192,9 +192,9 @@ module.exports = class orderService {
                 order.financeCo = factory.newRelationship(bna_config.namespace, 'FinanceCo', req.body.financeCo);
                 for (let each in req.body.items) {
                     (function (_idx, _arr) {
-                        _arr[_idx].description = _arr[_idx].itemDescription;
+                        _arr[_idx].title = _arr[_idx].title;
                         order.items.push(JSON.stringify(_arr[_idx]));
-                        order.amount += parseInt(_arr[_idx].extendedPrice);
+                        order.amount += parseInt(_arr[_idx].subtotal);
                     })(each, req.body.items);
                 }
                 // create the buy transaction
