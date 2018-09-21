@@ -15,7 +15,7 @@ module.exports=class Product{
         let method="productRepo/insert";
         console.log(method);
 
-        return connection.query("INSERT INTO tb_product(title,description,price,owner) VALUES(?,?,?,?)",[_product.title,product.description,price,owner],callback);
+        return connection.query("INSERT INTO tb_product(title,description,price,owner) VALUES(?,?,?,?)",[_product.title,_product.description,_product.price,_product.owner],callback);
     };
     getByID(_productID,callback){
         let method="productRepo/getByID";

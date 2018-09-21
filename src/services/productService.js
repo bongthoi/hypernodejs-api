@@ -56,7 +56,7 @@ module.exports = class ProductService {
         console.log(method);
 
         let product = new Product(req.params.id, req.body.title, req.body.description, req.body.price, req.body.owner);
-        productRepo.insert(product, function (err, data) {
+        productRepo.update(product, function (err, data) {
             if (err) {
                 res.json(err);
             } else {
