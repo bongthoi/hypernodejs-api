@@ -5,7 +5,7 @@ var Product=require('../models/product');
 
 module.exports=class Product{
 
-    getAll(){
+    getAll(callback){
         let method="productRepo/getAll";
         console.log(method);
         
