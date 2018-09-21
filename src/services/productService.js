@@ -10,7 +10,7 @@ module.exports = class ProductService {
     constructor() { };
     getAll(req, res, next) {
         let method = "productService/getAll";
-        console.log(method);
+        console.log(method+ "  -->success");
 
 
         productRepo.getAll(function (err, data) {
@@ -24,7 +24,7 @@ module.exports = class ProductService {
 
     insert(req, res) {
         let method = "productService/insert";
-        console.log(method);
+        console.log(method+ "  -->success");
 
         let product = new Product(null, req.body.title, req.body.description,req.body.quantity, req.body.price, req.body.owner);
         productRepo.insert(product, function (err, data) {
@@ -39,7 +39,7 @@ module.exports = class ProductService {
 
     getByID(req, res) {
         let method = "productService/getByID: " + req.params.id;
-        console.log(method);
+        console.log(method+ "  -->success");
 
         productRepo.getByID(req.params.id, function (err, data) {
             if (err) {
@@ -53,7 +53,7 @@ module.exports = class ProductService {
 
     update(req, res) {
         let method = "productService/update: " + req.params.id;
-        console.log(method);
+        console.log(method+ "  -->success");
 
         let product = new Product(req.params.id, req.body.title, req.body.description,req.body.quantity,req.body.price, req.body.owner);
         productRepo.update(product, function (err, data) {
@@ -68,7 +68,7 @@ module.exports = class ProductService {
 
     delete(req, res) {
         let method = "productService/delete: " + req.params.id;
-        console.log(method);
+        console.log(method+ "  -->success");
 
         productRepo.delete(req.params.id, function (err, data) {
             if (err) {
