@@ -26,7 +26,7 @@ module.exports = class ProductService {
         let method = "productService/insert";
         console.log(method);
 
-        let product = new Product(null, req.body.title, req.body.description, req.body.price, req.body.owner);
+        let product = new Product(null, req.body.title, req.body.description,req.body.quantity, req.body.price, req.body.owner);
         productRepo.insert(product, function (err, data) {
             if (err) {
                 res.json(err);
@@ -55,7 +55,7 @@ module.exports = class ProductService {
         let method = "productService/update: " + req.params.id;
         console.log(method);
 
-        let product = new Product(req.params.id, req.body.title, req.body.description, req.body.price, req.body.owner);
+        let product = new Product(req.params.id, req.body.title, req.body.description,req.body.quantity,req.body.price, req.body.owner);
         productRepo.update(product, function (err, data) {
             if (err) {
                 res.json(err);

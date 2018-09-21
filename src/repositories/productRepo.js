@@ -15,7 +15,7 @@ module.exports=class Product{
         let method="productRepo/insert";
         console.log(method);
 
-        return connection.query("INSERT INTO tb_product(title,description,price,owner) VALUES(?,?,?,?)",[_product.title,_product.description,_product.price,_product.owner],callback);
+        return connection.query("INSERT INTO tb_product(title,description,quantity,price,owner) VALUES(?,?,?,?,?)",[_product.title,_product.description,_product.quantity,_product.price,_product.owner],callback);
     };
     getByID(_productID,callback){
         let method="productRepo/getByID";
@@ -27,7 +27,7 @@ module.exports=class Product{
         let method="productRepo/update";
         console.log(method);
 
-        return connection.query("UPDATE tb_product SET title=?,description=?,price=?,owner=? WHERE id=?",[_product.title,_product.description,_product.price,_product.owner,parseInt(_product.id)],callback);
+        return connection.query("UPDATE tb_product SET title=?,description=?,quantity=?,price=?,owner=? WHERE id=?",[_product.title,_product.description,_product.quantity,_product.price,_product.owner,parseInt(_product.id)],callback);
     };
     delete(_productID,callback){
         let method="productRepo/delete";
