@@ -2,11 +2,13 @@
 module.exports = function (app) {
     let invalidPathUtility = require("../utilities/invalidPathUtility");
     let sampleService = require("../services/sampleService");
+    let bna_config = require("../../config/bna_config.json");
     let buyerService = require("../services/buyerService");
     let sellerService = require("../services/sellerService");
     let orderService = require("../services/orderService");
     let transactionService = require("../services/transactionService");
-    let bna_config = require("../../config/bna_config.json");
+    let productService=require('../services/productService');
+    
 
     /** */
     let SampleService = new sampleService();
@@ -14,6 +16,7 @@ module.exports = function (app) {
     let SellerService=new sellerService();
     let TransactionService=new transactionService();
     let OrderService=new orderService();
+    let ProductService=new productService();
 
     /**Buyers */
     app.route("/api/" + bna_config.namespace + ".Buyer")
@@ -46,6 +49,14 @@ module.exports = function (app) {
     app.route("/api/" + bna_config.namespace + ".Order.getOrderByUserID/:userID")
         .get(OrderService.getOrderByUserID);
         
+    /**Products */
+    app.route("/api/" + bna_config.namespace + ".Product")
+        .get(ProductService.getAll)
+        .post(ProductService.insert);
+    app.route("/api/" + bna_config.namespace + ".Product/:id")
+        .get(ProductService.getByID)
+        .put(ProductService.update)
+        .delete(ProductService.delete);
 
     /**Transaction */
     app.route("/api/" + bna_config.namespace + ".Transaction")

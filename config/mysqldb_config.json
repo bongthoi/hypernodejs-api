@@ -1,0 +1,6 @@
+{
+    "host":"jdbc:mysql://103.77.169.245:3306",
+    "database_name":"hyperledgerapi",
+    "user":"mysql245",
+    "password":"mysql245@glorious"
+}
