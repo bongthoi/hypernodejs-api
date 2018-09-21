@@ -27,7 +27,7 @@ module.exports=class Product{
         let method="productRepo/update";
         console.log(method);
 
-        return connection.query("UPDATE tb_product SET title=?,description=?,price=?,owner=? WHRE id=?",[_product.title,_product.description,_product.price,_product.owner,_product.id],callback);
+        return connection.query("UPDATE tb_product SET title=?,description=?,price=?,owner=? WHRE id=?",[_product.title,_product.description,_product.price,_product.owner,parseInt(_product.id)],callback);
     };
     delete(_productID,callback){
         let method="productRepo/delete";
