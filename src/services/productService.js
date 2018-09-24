@@ -54,6 +54,21 @@ module.exports = class ProductService {
 
     };
 
+    getByOwner(req, res) {
+        let method = "productService/getByID: " + req.params.owner;
+        console.log(method);
+
+        productRepo.getByID(req.params.owner, function (err, data) {
+            if (err) {
+                res.json(err);
+            } else {
+                console.log(method+ "  -->success");
+                res.json(data);
+            }
+        });
+
+    };
+
     update(req, res) {
         let method = "productService/update: " + req.params.id;
         console.log(method);
