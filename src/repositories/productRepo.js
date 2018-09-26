@@ -46,4 +46,11 @@ module.exports=class Product{
 
         return connection.query("DELETE FROM tb_product WHERE id=?",[_productID],callback);
     };
+
+    getByTitleandOwner(_name,_owner,callback){
+        let method="productRepo/getByTitleandOwner/owner: "+_owner
+        console.log(method+ "  -->success");
+
+        return connection.query("SELECT * FROM tb_product WHERE AND title=? AND owner=?",[_name,_owner],callback);
+    };
 }

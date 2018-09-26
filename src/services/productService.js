@@ -101,4 +101,18 @@ module.exports = class ProductService {
     };
 
 
+    getByTitleandOwner(req, res) {
+        let method = "productService/getByID: " + req.params.owner;
+        console.log(method);
+
+        productRepo.getByTitleandOwner(req.params.title,req.params.owner, function (err, data) {
+            if (err) {
+                res.json(err);
+            } else {
+                console.log(method+ "  -->success");
+                res.json(data);
+            }
+        });
+
+    };
 };

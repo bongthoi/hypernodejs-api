@@ -58,7 +58,9 @@ module.exports = function (app) {
         .put(ProductService.update)
         .delete(ProductService.delete);
     app.route("/api/" + bna_config.namespace + ".ProductByOwner/:owner")
-        .get(ProductService.getByOwner)
+        .get(ProductService.getByOwner);
+    app.route("/api/" + bna_config.namespace + ".ProductByTitleandOwner/:title/:owner")
+        .get(ProductService.getByTitleandOwner);
 
     /**Transaction */
     app.route("/api/" + bna_config.namespace + ".Transaction")
