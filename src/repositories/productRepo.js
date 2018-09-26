@@ -51,6 +51,6 @@ module.exports=class Product{
         let method="productRepo/getByTitleandOwner/owner: "+_owner
         console.log(method+ "  -->success");
 
-        return connection.query("SELECT * FROM tb_product WHERE AND title=? AND owner=?",[_name,_owner],callback);
+        return connection.query("SELECT * FROM tb_product WHERE title=? AND owner=?",[_name,_owner],callback);
     };
 }
