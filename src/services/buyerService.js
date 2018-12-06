@@ -26,7 +26,7 @@ module.exports = class BuyerService {
         let method = "buyerService/insert";
         console.log(method);
 
-        let buyer = new Buyer(req.body.buyerID,req.body.buyerPW, req.body.companyName);
+        let buyer = new Buyer(req.body.buyerID,req.body.buyerPW,req.body.buyerWL, req.body.companyName);
 
 
         BuyerRepo.insert(buyer)
@@ -59,7 +59,7 @@ module.exports = class BuyerService {
         let method = "buyerService/update";
         console.log(method);
 
-        let buyer = new Buyer(req.params.buyerID,req.body.buyerPW ,req.body.companyName);
+        let buyer = new Buyer(req.params.buyerID,req.body.buyerPW,req.body.buyerWL ,req.body.companyName);
 
         BuyerRepo.update(buyer)
             .then(result => {

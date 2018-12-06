@@ -8,10 +8,12 @@ import composer.events.*
 participant Buyer identified by buyerID extends Member{
     o String buyerID
     o String buyerPW
+    o String buyerWL
 }
 participant Seller identified by sellerID extends Member{
     o String sellerID
     o String sellerPW
+    o String sellerWL
 }
 participant Shipper identified by shipperID extends Member {
     o String shipperID

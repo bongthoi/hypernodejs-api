@@ -31,7 +31,7 @@ module.exports = class SellerRepo {
     };
 
     insert(_seller) {
-        let seller = new Seller(_seller.sellerID,_seller.sellerPW, _seller.companyName);
+        let seller = new Seller(_seller.sellerID,_seller.sellerPW,_seller.sellerWL, _seller.companyName);
         let result;
 
         let method = "sellerRepo/insert/sellerID: " + seller.sellerID;
@@ -45,6 +45,7 @@ module.exports = class SellerRepo {
                 "$class": seller.$class,
                 "sellerID": seller.sellerID,
                 "sellerPW":seller.sellerPW,
+                "sellerWL":seller.sellerWL,
                 "companyName": seller.companyName
             },
             json: true
@@ -88,7 +89,7 @@ module.exports = class SellerRepo {
             });
     };
     update(_seller) {
-        let seller = new Seller(_seller.sellerID,_seller.sellerPW, _seller.companyName);
+        let seller = new Seller(_seller.sellerID,_seller.sellerPW,_seller.sellerWL, _seller.companyName);
         let result;
 
         let method = "sellerRepo/update/sellerID: " + seller.sellerID;
@@ -101,6 +102,7 @@ module.exports = class SellerRepo {
                 "$class": seller.$class,
                 "sellerID": seller.sellerID,
                 "sellerPW":seller.sellerPW,
+                "sellerWL":seller.sellerWL,
                 "companyName": seller.companyName
             },
             json: true

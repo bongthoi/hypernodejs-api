@@ -26,7 +26,7 @@ module.exports = class SellerService {
         let method = "sellerService/insert";
         console.log(method);
 
-        let seller = new Seller(req.body.sellerID,req.body.sellerPW, req.body.companyName);
+        let seller = new Seller(req.body.sellerID,req.body.sellerPW,req.body.sellerWL, req.body.companyName);
 
 
         SellerRepo.insert(seller)
@@ -59,7 +59,7 @@ module.exports = class SellerService {
         let method = "sellerService/update";
         console.log(method);
 
-        let seller = new Seller(req.params.sellerID,req.body.sellerPW ,req.body.companyName);
+        let seller = new Seller(req.params.sellerID,req.body.sellerPW,req.body.sellerWL ,req.body.companyName);
 
         SellerRepo.update(seller)
             .then(result => {
