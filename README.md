@@ -6,6 +6,7 @@
 - [x] Products
 - [x] Orders
 - [x] Transactions
+- [x] Integrated Token
 
 ## Installation
 
