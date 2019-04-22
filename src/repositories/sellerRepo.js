@@ -1,6 +1,6 @@
 "use strict";
 var rq = require("request-promise");
-const db_config = require("../../config/db_config.json");
+const private_api = require("../../config/private_api.json");
 var Seller = require("../models/seller");
 
 module.exports = class SellerRepo {
@@ -14,7 +14,7 @@ module.exports = class SellerRepo {
 
         const options = {
             method: 'GET',
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + seller.$class,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + seller.$class,
             json: true
         };
         
@@ -40,7 +40,7 @@ module.exports = class SellerRepo {
 
         const options = {
             method: "POST",
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + seller.$class,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + seller.$class,
             body: {
                 "$class": seller.$class,
                 "sellerID": seller.sellerID,
@@ -73,7 +73,7 @@ module.exports = class SellerRepo {
 
         const options = {
             method: "GET",
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + seller.$class + "/" + seller.sellerID,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + seller.$class + "/" + seller.sellerID,
             json: true
         };
 
@@ -97,7 +97,7 @@ module.exports = class SellerRepo {
         
         const options = {
             method: "PUT",
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + seller.$class + "/" + seller.sellerID,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + seller.$class + "/" + seller.sellerID,
             body: {
                 "$class": seller.$class,
                 "sellerID": seller.sellerID,
@@ -129,7 +129,7 @@ module.exports = class SellerRepo {
 
         const options = {
             method: "DELETE",
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + seller.$class + "/" + seller.sellerID,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + seller.$class + "/" + seller.sellerID,
             json: true
         };
 

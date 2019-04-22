@@ -1,6 +1,6 @@
 "use strict";
 var rq = require("request-promise");
-const db_config = require("../../config/db_config.json");
+const private_api = require("../../config/private_api.json");
 var Buyer = require("../models/buyer");
 
 module.exports = class BuyerRepo {
@@ -14,7 +14,7 @@ module.exports = class BuyerRepo {
 
         const options = {
             method: 'GET',
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + buyer.$class,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + buyer.$class,
             json: true
         };
         
@@ -40,7 +40,7 @@ module.exports = class BuyerRepo {
 
         const options = {
             method: "POST",
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + buyer.$class,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + buyer.$class,
             body: {
                 "$class": buyer.$class,
                 "buyerID": buyer.buyerID,
@@ -73,7 +73,7 @@ module.exports = class BuyerRepo {
 
         const options = {
             method: "GET",
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + buyer.$class + "/" + buyer.buyerID,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + buyer.$class + "/" + buyer.buyerID,
             json: true
         };
 
@@ -97,7 +97,7 @@ module.exports = class BuyerRepo {
         
         const options = {
             method: "PUT",
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + buyer.$class + "/" + buyer.buyerID,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + buyer.$class + "/" + buyer.buyerID,
             body: {
                 "$class": buyer.$class,
                 "buyerID": buyer.buyerID,
@@ -129,7 +129,7 @@ module.exports = class BuyerRepo {
 
         const options = {
             method: "DELETE",
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + buyer.$class + "/" + buyer.buyerID,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + buyer.$class + "/" + buyer.buyerID,
             json: true
         };
 

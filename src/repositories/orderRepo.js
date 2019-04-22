@@ -1,6 +1,6 @@
 'use strict';
 var rq = require("request-promise");
-const db_config = require("../../config/db_config.json");
+const private_api = require("../../config/private_api.json");
 var Order = require("../models/order");
 
 
@@ -14,7 +14,7 @@ module.exports = class OrderRepo {
 
         const options = {
             method: 'GET',
-            uri: db_config.api_ip + ':' + db_config.api_port + db_config.api_url + order.$class,
+            uri: private_api.api_ip + ':' + private_api.api_port + private_api.api_url + order.$class,
             json: true
         };
 
@@ -38,7 +38,7 @@ module.exports = class OrderRepo {
 
         const options = {
             method: "POST",
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + order.$class,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + order.$class,
             body: {
                 "$class": (order.$class),
                 "orderNumber": order.orderNumber,
@@ -95,7 +95,7 @@ module.exports = class OrderRepo {
 
         const options = {
             method: "GET",
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + order.$class + "/" + order.orderNumber,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + order.$class + "/" + order.orderNumber,
             json: true
         };
 
@@ -120,7 +120,7 @@ module.exports = class OrderRepo {
 
         const options = {
             method: "PUT",
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + order.$class + "/" + order.orderNumber,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + order.$class + "/" + order.orderNumber,
             body: {
                 "$class": order.$class,
                 "orderNumber": order.orderNumber,
@@ -174,7 +174,7 @@ module.exports = class OrderRepo {
 
         const options = {
             method: "DELETE",
-            uri: db_config.api_ip + ":" + db_config.api_port + db_config.api_url + order.$class + "/" + order.orderNumber,
+            uri: private_api.api_ip + ":" + private_api.api_port + private_api.api_url + order.$class + "/" + order.orderNumber,
             json: true
         };
 
